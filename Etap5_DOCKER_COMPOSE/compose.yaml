@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  webbuild:
+    hostname: web1
+    build: .
+    image: local:goweb
+    ports:
+      - "8080:8080"
+    environment:
+      VAR: web
+
+  web:
+    hostname: web2
+    image: local:goweb
+    ports:
+      - "8081:8080"
+    environment:
+      VAR: web2
+    container_name: web2
+    networks:
+      - web
+    volumes:
+      - data:/data
+
+
+networks:
+  web:
+    name: web
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: '/home/adam/szkolenia'
